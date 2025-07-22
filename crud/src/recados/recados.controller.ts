@@ -56,7 +56,10 @@ export class RecadosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDto: UpdateRecadoDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDto: UpdateRecadoDto,
+  ) {
     return this.service.update(id, updateDto);
   }
 
