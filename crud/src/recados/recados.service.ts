@@ -25,18 +25,17 @@ export class RecadosService {
     },
   ];
 
-  //metodo que retorna todos os recados da lista
   async findAll() {
-    //como eh operacao assincrona e o metodo retorna uma promisse, o async é necessário
-    const recados = await this.recadoRepository.find(); //metodo do typeorm que busca todos os registros da tabela
-    console.log(recados);
-
-    return recados;
+    //se nao for necessario manipular os dados, podemos retornar a promisse diretamente, o nest resolve ela sozinho
+    return this.recadoRepository.find(); //metodo do typeorm que busca todos os registros da tabela
   }
 
-  findOne(id: string) {
-    //retornando o item que tiver como id o valor passado por parametro
-    return this.recados.find((item) => item.id == +id);
+  async findOne(id: string) {
+    const recado = await this.recadoRepository.findOneBy({ id: +id });
+
+    if (recado) return recado;
+
+    throw new NotFoundError('Objeto nao encontrado');
   }
 
   create(createDto: CreateRecadoDto) {
