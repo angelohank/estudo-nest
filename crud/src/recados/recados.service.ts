@@ -38,18 +38,15 @@ export class RecadosService {
     throw new NotFoundError('Objeto nao encontrado');
   }
 
-  create(createDto: CreateRecadoDto) {
-    this.lastId++; //atualiza o id
-    const id = this.lastId;
-
+  async create(createDto: CreateRecadoDto) {
     const novoRecado = {
-      id,
       ...createDto,
       read: false,
       dtCriacao: new Date(), //tem que criar esses dados "na mao" pois nao existem no dto
     };
 
-    this.recados.push(novoRecado); //adiciona o novo recado no array
+    const recado = await this.recadoRepository.create(novoRecado); //metodo do typeorm que cria o registro na tabela. Cria o valor do createdAt aqui
+    return this.recadoRepository.save(recado); //metodo do typeorm que salva o registro na tabela
   }
 
   update(id: string, dto: UpdateRecadoDto) {
@@ -66,12 +63,13 @@ export class RecadosService {
     };
   }
 
-  remove(id: number) {
-    const recadoExistente = this.recados.findIndex((item) => item.id === id); //encontrando item com o id passado
-    if (recadoExistente >= 0) {
-      this.recados.splice(recadoExistente); //removendo o item que for encontrado
-    } else {
-      return 'nao foi encontrado nenhum registro';
+  async remove(id: number) {
+    const recado = await this.recadoRepository.findOneBy({ id });
+    if (!recado) {
+      throw new NotFoundError('Objeto nao encontrado');
     }
+
+    this.recadoRepository.remove(recado); //metodo do typeorm que remove o registro da tabela
+    return { message: 'Recado deletado com sucesso' };
   }
 }
