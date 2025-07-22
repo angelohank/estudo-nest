@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { RecadoEntity } from './entities/recado.entity';
 import { CreateRecadoDto } from './dto/create-recado.dto';
-import { read } from 'fs';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { NotFoundError } from 'rxjs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RecadosService {
+  constructor(
+    @InjectRepository(RecadoEntity)
+    private readonly recadoRepository: Repository<RecadoEntity>, //injetando o repositório da entidade RecadoEntity
+  ) {}
+
   private lastId = 1;
   private recados: RecadoEntity[] = [
     {
@@ -20,8 +26,12 @@ export class RecadosService {
   ];
 
   //metodo que retorna todos os recados da lista
-  findAll() {
-    return this.recados;
+  async findAll() {
+    //como eh operacao assincrona e o metodo retorna uma promisse, o async é necessário
+    const recados = await this.recadoRepository.find(); //metodo do typeorm que busca todos os registros da tabela
+    console.log(recados);
+
+    return recados;
   }
 
   findOne(id: string) {
