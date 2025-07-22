@@ -16,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       password: '1234',
       database: 'estudos-nest',
       autoLoadEntities: true, //carrega entidades sem precisar especificar
-      //synchronize: true, //sincroniza o banco de dados com as entidades. NAO DEVE SER USADO EM PRODUCAO
+      synchronize: true, //sincroniza o banco de dados com as entidades. NAO DEVE SER USADO EM PRODUCAO
     }),
   ],
   controllers: [AppController],
