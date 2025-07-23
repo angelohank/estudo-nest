@@ -8,11 +8,13 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseIntIdPipe } from 'src/common/pipes/parse-int-id.pipe';
 
 /*
 CRUD
@@ -33,6 +35,7 @@ Usado pra validar, ou transformar dados -> padrao NEST
 */
 
 @Controller('recados')
+@UsePipes(ParseIntIdPipe) //aplica a pipe de conversao de id em todas as rotas desse controller
 export class RecadosController {
   constructor(private readonly service: RecadosService) {}
 
@@ -47,8 +50,7 @@ export class RecadosController {
   }
 
   @Get(':id')
-  //so vai pegar o id, dentros dos parametros
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: number) {
     return this.service.findOne(id);
   }
 
