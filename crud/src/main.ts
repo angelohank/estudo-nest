@@ -12,7 +12,7 @@ async function bootstrap() {
       transform: false, //tenta transformar os tipos dos parametros e dtos. Causa um pequeno impacto de performance
     }),
     new ParseIntIdPipe(), //aplica a pipe de conversao de id em todos os parametros que forem IDs, de todas as rotas da aplicacao
-  ); //validador TODO: estudar melhor o que essa classe faz e como funciona
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
