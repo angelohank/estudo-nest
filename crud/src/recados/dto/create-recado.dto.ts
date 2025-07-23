@@ -1,6 +1,7 @@
 import {
   IsNotEmpty,
   IsOptional,
+  IsPositive,
   IsString,
   MaxLength,
   MinLength,
@@ -13,16 +14,21 @@ export class CreateRecadoDto {
   @MaxLength(255) //definindo tamanho maximo do campo
   readonly texto: string;
 
-  @IsString({ message: 'esse valor deve ser uma string' })
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(50)
-  @IsOptional() //defindindo campo como opcional
-  readonly from: string;
+  @IsPositive()
+  fromId: number;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(50)
-  readonly for: string;
+  @IsPositive()
+  forId: number;
+  // @IsString({ message: 'esse valor deve ser uma string' })
+  // @IsNotEmpty()
+  // @MinLength(2)
+  // @MaxLength(50)
+  // @IsOptional() //defindindo campo como opcional
+  // readonly from: string;
+
+  // @IsString()
+  // @IsNotEmpty()
+  // @MinLength(2)
+  // @MaxLength(50)
+  // readonly for: string;
 }

@@ -48,7 +48,11 @@ export class PessoaService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} pessoa`;
+    const pessoa = this.pessoaRepository.findOneBy({ id });
+
+    if (!pessoa) throw new NotFoundException('Pessoa não encontrada');
+
+    return pessoa;
   }
 
   async update(id: number, updatePessoaDto: UpdatePessoaDto) {

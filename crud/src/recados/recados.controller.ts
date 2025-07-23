@@ -45,7 +45,7 @@ export class RecadosController {
 
   @Get(':id')
   //so vai pegar o id, dentros dos parametros
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.service.findOne(id);
   }
 
