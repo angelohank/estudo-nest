@@ -37,9 +37,6 @@ export class RecadosService {
         id,
       },
       relations: ['from', 'for'], //carrega as relações de from e for
-      order: {
-        id: 'desc',
-      },
       select: {
         from: { id: true, name: true }, //seleciona apenas o id e nome da pessoa que enviou o recado
         for: { id: true, name: true }, //seleciona apenas o id e nome da pessoa que recebeu o recado
