@@ -12,6 +12,7 @@ import {
 import { RecadosService } from './recados.service';
 import { CreateRecadoDto } from './dto/create-recado.dto';
 import { UpdateRecadoDto } from './dto/update-recado.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 /*
 CRUD
@@ -39,8 +40,10 @@ export class RecadosController {
   //@HttpCode(HttpStatus.CREATED) mesmo principio, mas utilizando as contantes do nest
   @Get()
   //query params -> vai imprimir todos os parametros passados depois do ? da url
-  findAll(@Query() paginacao: any) {
-    return this.service.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    const { limit, offset } = paginationDto;
+
+    return this.service.findAll(paginationDto);
   }
 
   @Get(':id')

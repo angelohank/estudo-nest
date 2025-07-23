@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PessoaService } from 'src/pessoa/pessoa.service';
 import { text } from 'stream/consumers';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class RecadosService {
@@ -16,10 +17,15 @@ export class RecadosService {
     private readonly pessoaService: PessoaService,
   ) {}
 
-  async findAll() {
+  async findAll(paginationDto?: PaginationDto) {
+    const { limit = 10, offset = 0 } = paginationDto || {};
+
     //se nao for necessario manipular os dados, podemos retornar a promisse diretamente, o nest resolve ela sozinho
     //metodo do typeorm que busca todos os registros da tabela
-    return this.recadoRepository.find({
+    const recados = await this.recadoRepository.find({
+      //PAGINACAO no nest. Esses nomes sao especificos do typeorm
+      take: limit, //limite de registros a serem retornados
+      skip: offset, //pular os primeiros registros
       relations: ['from', 'for'], //carrega as relações de from e for
       order: {
         id: 'desc',
@@ -29,6 +35,8 @@ export class RecadosService {
         for: { id: true, name: true }, //seleciona apenas o id e nome da pessoa que recebeu o recado
       },
     });
+
+    return recados;
   }
 
   async findOne(id: number) {
