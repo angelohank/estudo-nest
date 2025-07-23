@@ -8,7 +8,6 @@ import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PessoaEntity } from './entities/pessoa.entity';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class PessoaService {
@@ -52,8 +51,20 @@ export class PessoaService {
     return `This action returns a #${id} pessoa`;
   }
 
-  update(id: number, updatePessoaDto: UpdatePessoaDto) {
-    return `This action updates a #${id} pessoa`;
+  async update(id: number, updatePessoaDto: UpdatePessoaDto) {
+    const partialPessoa = {
+      passwordHash: updatePessoaDto?.password,
+      name: updatePessoaDto?.name,
+    };
+
+    const pessoa = await this.pessoaRepository.preload({
+      id,
+      ...partialPessoa,
+    });
+
+    if (!pessoa) throw new NotFoundException('Pessoa não encontrada');
+
+    return this.pessoaRepository.save(pessoa);
   }
 
   async remove(id: number) {
