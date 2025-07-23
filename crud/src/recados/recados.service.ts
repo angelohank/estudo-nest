@@ -85,18 +85,12 @@ export class RecadosService {
   }
 
   async update(id: number, dto: UpdateRecadoDto) {
-    const partialUpdateRecadoDto = {
-      read: dto?.read,
-      texto: dto?.texto,
-    };
+    const recado = await this.findOne(id);
 
-    //preload recebe o argumento para encontrar o objeto, e os valores a serem atualizados
-    const recado = await this.recadoRepository.preload({
-      id,
-      ...partialUpdateRecadoDto,
-    });
-
-    if (!recado) throw new NotFoundError('Objeto nao encontrado');
+    //quero atualizar ou o texto, ou o read
+    /*nao faz sentido atualizar um recado que ja foi lido, trabalhar nisso no futuro */
+    recado.texto = dto?.texto ?? recado.texto;
+    recado.read = dto?.read ?? recado.read;
 
     await this.recadoRepository.save(recado); //metodo do typeorm que salva o registro atualizado na tabela
     return recado;

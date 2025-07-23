@@ -19,13 +19,13 @@ export class RecadoEntity {
   texto: string;
 
   /*muito recados podem ser enviados por uma unica pessoa*/
-  @ManyToOne(() => PessoaEntity) //DER -> uma pessoa pode mandar varios recados
+  @ManyToOne(() => PessoaEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' }) //DER -> uma pessoa pode mandar varios recados
   //especifica a coluna "for", que armazena o id da pessoa que enviou o recado
   @JoinColumn({ name: 'from' })
   from: PessoaEntity;
 
   /*muito recados podem ser enviados para uma unica pessoa*/
-  @ManyToOne(() => PessoaEntity)
+  @ManyToOne(() => PessoaEntity, { onDelete: 'CASCADE', onUpdate: 'CASCADE' }) //DER -> uma pessoa pode receber varios recados
   //especifica a coluna "from", que armazena o id da pessoa que recebeu o recado
   @JoinColumn({ name: 'for' })
   for: PessoaEntity;
